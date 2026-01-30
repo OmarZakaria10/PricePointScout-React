@@ -68,7 +68,7 @@ jobs:
 
                   git add helm/pricepointscout-chart/values.yaml
                   git commit -m "Update frontend image to ${{ github.sha }} [GitHub Actions]"
-                  git push https://${{ secrets.GITHUB_TOKEN }}@github.com/OmarZakaria10/PricePointScout-ArgoCD.git $BRANCH
+                  git push https://${{ secrets.ARGOCD_TOKEN }}@github.com/OmarZakaria10/PricePointScout-ArgoCD.git $BRANCH
 
             - name: Create Pull Request
               run: |
@@ -85,7 +85,7 @@ jobs:
                   )
 
                   curl -X POST \
-                    -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+                    -H "Authorization: token ${{ secrets.ARGOCD_TOKEN }}" \
                     -H "Content-Type: application/json" \
                     https://api.github.com/repos/OmarZakaria10/PricePointScout-ArgoCD/pulls \
                     -d "$PR_BODY"
