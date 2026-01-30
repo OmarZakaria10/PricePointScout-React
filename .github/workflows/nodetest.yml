@@ -48,8 +48,18 @@ jobs:
                   BRANCH="update-frontend-${{ github.sha }}"
                   git checkout -b $BRANCH
 
-                  # Update the frontend image tag in values.yaml
-                  sed -i '0,/repository: omarzakaria10\/price-point-scout-react/{n;s/tag:.*/tag: "${{ github.sha }}"/}' helm/pricepointscout-chart/values.yaml
+                  # Update the frontend image tag in values.yaml using awk
+                  awk -v sha="${{ github.sha }}" '
+                  /repository: omarzakaria10\/price-point-scout-react/ {
+                    print; 
+                    getline; 
+                    sub(/tag:.*/, "tag: \"" sha "\""); 
+                    print; 
+                    found=1; 
+                    next
+                  } 
+                  !found || !/repository: omarzakaria10\/price-point-scout-react/ {print}
+                  ' helm/pricepointscout-chart/values.yaml > values.tmp && mv values.tmp helm/pricepointscout-chart/values.yaml
 
                   # Verify the change was made
                   echo "Updated frontend image tag:"
