@@ -9,6 +9,7 @@ on:
             - "Dockerfile"
             - "docker-compose.yml"
             - "**.jsx"
+    workflow_dispatch:
 
 jobs:
     build-and-deploy:
