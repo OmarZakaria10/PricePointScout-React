@@ -1,0 +1,83 @@
+name: Node.js CI/CD
+
+on:
+    push:
+        branches: [main]
+        paths:
+            - "**.js"
+            - "**.json"
+            - "Dockerfile"
+            - "docker-compose.yml"
+            - "**.jsx"
+
+jobs:
+    build-and-deploy:
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v4
+
+            - name: Set up Docker Buildx
+              uses: docker/setup-buildx-action@v3
+
+            - name: Login to DockerHub
+              uses: docker/login-action@v3
+              with:
+                  username: ${{ secrets.DOCKERHUB_USERNAME }}
+                  password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+            - name: Build and push Docker image
+              uses: docker/build-push-action@v5
+              with:
+                  context: .
+                  file: ./Dockerfile
+                  push: true
+                  tags: |
+                      omarzakaria10/price-point-scout-react:${{ github.sha }}
+                      omarzakaria10/price-point-scout-react:latest
+
+            - name: Clone ArgoCD repository
+              run: |
+                  git clone https://github.com/OmarZakaria10/PricePointScout-ArgoCD.git
+                  cd PricePointScout-ArgoCD
+
+                  git config user.email "github-actions@pricepointscout.com"
+                  git config user.name "GitHub Actions"
+
+                  BRANCH="update-frontend-${{ github.sha }}"
+                  git checkout -b $BRANCH
+
+                  # Update the frontend image tag in values.yaml
+                  sed -i '0,/repository: omarzakaria10\\/price-point-scout-react/ { n; s|tag:.*|tag: "${{ github.sha }}"| }' helm/pricepointscout-chart/values.yaml
+
+                  # Verify the change was made
+                  echo "Updated frontend image tag:"
+                  grep -A 1 "repository: omarzakaria10/price-point-scout-react" helm/pricepointscout-chart/values.yaml
+
+                  git add helm/pricepointscout-chart/values.yaml
+                  git commit -m "Update frontend image to ${{ github.sha }} [GitHub Actions]"
+                  git push https://${{ secrets.GITHUB_TOKEN }}@github.com/OmarZakaria10/PricePointScout-ArgoCD.git $BRANCH
+
+            - name: Create Pull Request
+              run: |
+                  cd PricePointScout-ArgoCD
+
+                  PR_BODY=$(cat <<EOF
+                  {
+                    "title": "Deploy frontend ${{ github.sha }}",
+                    "body": "Updated frontend Helm chart with image: ${{ github.sha }}\\n\\nTriggered by: ${{ github.event.head_commit.message }}\\n\\nThis will be automatically synced by ArgoCD after merge.",
+                    "head": "update-frontend-${{ github.sha }}",
+                    "base": "main"
+                  }
+                  EOF
+                  )
+
+                  curl -X POST \
+                    -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+                    -H "Content-Type: application/json" \
+                    https://api.github.com/repos/OmarZakaria10/PricePointScout-ArgoCD/pulls \
+                    -d "$PR_BODY"
+
+                  cd ..
+                  rm -rf PricePointScout-ArgoCD
