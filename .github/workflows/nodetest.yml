@@ -49,7 +49,7 @@ jobs:
                   git checkout -b $BRANCH
 
                   # Update the frontend image tag in values.yaml
-                  sed -i '0,/repository: omarzakaria10\\/price-point-scout-react/ { n; s|tag:.*|tag: "${{ github.sha }}"| }' helm/pricepointscout-chart/values.yaml
+                  sed -i '0,/repository: omarzakaria10\/price-point-scout-react/{n;s/tag:.*/tag: "${{ github.sha }}"/}' helm/pricepointscout-chart/values.yaml
 
                   # Verify the change was made
                   echo "Updated frontend image tag:"
