@@ -16,8 +16,10 @@ const Cart = () => {
   const fetchCart = async () => {
     try {
       const data = await cartService.getCart();
-      setCart(data.data.cart);
+      console.log("Cart API response:", data);
+      setCart(data.data?.cart || data.cart || { items: [] });
     } catch (error) {
+      console.error("Cart fetch error:", error);
       toast.error("Failed to load cart");
     } finally {
       setLoading(false);

@@ -88,14 +88,14 @@ export const authService = {
 
 export const scrapeService = {
   // Guest scrape
-  scrapeGuest: async (params) => {
-    const response = await api.get("/scrape/guest", { params });
+  scrapeGuest: async (params, signal) => {
+    const response = await api.get("/scrape/guest", { params, signal });
     return response.data;
   },
 
   // User scrape (authenticated)
-  scrapeUser: async (params) => {
-    const response = await api.get("/scrape/user", { params });
+  scrapeUser: async (params, signal) => {
+    const response = await api.get("/scrape/user", { params, signal });
     return response.data;
   },
 };

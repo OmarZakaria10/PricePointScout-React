@@ -18,8 +18,13 @@ const History = () => {
   const fetchSearches = async () => {
     try {
       const data = await searchService.getMySearches();
-      setSearches(data.data.searches || []);
+      console.log("History API response:", data);
+      const searchList = data.data?.searches || data.searches || [];
+      // Sort by date, latest first
+      searchList.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+      setSearches(searchList);
     } catch (error) {
+      console.error("History fetch error:", error);
       toast.error("Failed to load search history");
     } finally {
       setLoading(false);
