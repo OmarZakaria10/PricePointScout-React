@@ -65,6 +65,11 @@ const Home = () => {
       return;
     }
 
+    if (sources.length === 0) {
+      toast.error("Please select at least one store");
+      return;
+    }
+
     // Cancel any ongoing search
     if (abortControllerRef.current) {
       abortControllerRef.current.abort();
@@ -80,11 +85,8 @@ const Home = () => {
       const params = {
         keyword: keyword.trim(),
         sort,
+        sources: sources.join(","),
       };
-
-      if (sources.length > 0) {
-        params.sources = sources.join(",");
-      }
 
       if (minPrice) params.minPrice = minPrice;
       if (maxPrice) params.maxPrice = maxPrice;
@@ -203,7 +205,7 @@ const Home = () => {
                       ))}
                       <span className="flex items-center text-sm text-gray-400 ml-2">
                         {sources.length === 0
-                          ? "All stores selected"
+                          ? "0 selected"
                           : `${sources.length} selected`}
                       </span>
                     </div>
@@ -220,29 +222,27 @@ const Home = () => {
                     </div>
                     <div className="grid grid-cols-3 gap-3">
                       <div className="relative">
-                        <DollarSign
-                          className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
-                          size={16}
-                        />
+                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 font-semibold text-sm">
+                          EGP
+                        </span>
                         <input
                           type="number"
                           placeholder="Min"
                           value={minPrice}
                           onChange={(e) => setMinPrice(e.target.value)}
-                          className="w-full pl-9 pr-3 py-2.5 bg-gray-50 border-2 border-gray-200 rounded-xl text-gray-900 focus:outline-none focus:border-primary-500 transition-all"
+                          className="w-full pl-14 pr-3 py-2.5 bg-gray-50 border-2 border-gray-200 rounded-xl text-gray-900 focus:outline-none focus:border-primary-500 transition-all"
                         />
                       </div>
                       <div className="relative">
-                        <DollarSign
-                          className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
-                          size={16}
-                        />
+                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 font-semibold text-sm">
+                          EGP
+                        </span>
                         <input
                           type="number"
                           placeholder="Max"
                           value={maxPrice}
                           onChange={(e) => setMaxPrice(e.target.value)}
-                          className="w-full pl-9 pr-3 py-2.5 bg-gray-50 border-2 border-gray-200 rounded-xl text-gray-900 focus:outline-none focus:border-primary-500 transition-all"
+                          className="w-full pl-14 pr-3 py-2.5 bg-gray-50 border-2 border-gray-200 rounded-xl text-gray-900 focus:outline-none focus:border-primary-500 transition-all"
                         />
                       </div>
                       <select
