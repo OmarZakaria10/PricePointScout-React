@@ -20,7 +20,8 @@ const Cart = () => {
       setCart(data.data?.cart || data.cart || { items: [] });
     } catch (error) {
       console.error("Cart fetch error:", error);
-      toast.error("Failed to load cart");
+      // Set empty cart on error instead of showing error message
+      setCart({ items: [] });
     } finally {
       setLoading(false);
     }

@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Mail, Lock, User as UserIcon, Eye, EyeOff } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
+import toast from "react-hot-toast";
 
 const Signup = () => {
   const [formData, setFormData] = useState({
@@ -28,6 +29,7 @@ const Signup = () => {
     e.preventDefault();
 
     if (formData.password !== formData.passwordConfirm) {
+      toast.error("Password is not the same as confirm password");
       return;
     }
 
