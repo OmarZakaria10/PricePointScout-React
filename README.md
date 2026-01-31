@@ -4,7 +4,7 @@ A modern, responsive React application for comparing prices across multiple e-co
 
 ## Features
 
-- 🔍 **Smart Search**: Search products across Amazon, Jumia, Noon and More...
+- 🔍 **Smart Search**: Search products across Amazon, Jumia, Btech and More...
 - 🎨 **Beautiful UI**: Dribbble-inspired design with smooth animations
 - 📱 **Fully Responsive**: Works perfectly on mobile, tablet, and desktop
 - 🔐 **Authentication**: Secure login/signup with JWT tokens stored in cookies

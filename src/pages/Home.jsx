@@ -155,7 +155,7 @@ const Home = () => {
               </h1>
 
               <p className="text-lg md:text-xl text-primary-100 max-w-2xl mx-auto">
-                Smart price comparison across Amazon, Jumia, Noon and more.
+                Smart price comparison across Amazon, Jumia, Btech and more.
                 Never overpay for products again.
               </p>
             </div>
@@ -345,7 +345,7 @@ const Home = () => {
                   Best Prices
                 </h3>
                 <p className="text-gray-600 leading-relaxed">
-                  Compare prices across Amazon, Jumia, Noon, and more to find
+                  Compare prices across Amazon, Jumia, Btech, and more to find
                   the absolute best deals available online.
                 </p>
               </div>
