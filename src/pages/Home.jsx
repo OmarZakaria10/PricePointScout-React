@@ -251,7 +251,7 @@ const Home = () => {
                         className="w-full px-3 py-2.5 bg-gray-50 border-2 border-gray-200 rounded-xl text-gray-900 focus:outline-none focus:border-primary-500 transition-all cursor-pointer"
                       >
                         <option value="asc">Low → High</option>
-                        <option value="des">High → Low</option>
+                        <option value="desc">High → Low</option>
                       </select>
                     </div>
                   </div>
